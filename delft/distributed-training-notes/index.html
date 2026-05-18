@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>큰 모델은 어떻게 학습시키는가 — Week 2~4 정리 | Tae Yong Kwon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ffffff",
+                        "on-primary": "#1a1c1c",
+                        "on-surface": "#e5e2e1",
+                        "on-surface-variant": "#c6c6c6",
+                        "surface-container-high": "#2a2a2a",
+                        "surface-container-low": "#1c1b1b",
+                        "surface-container": "#201f1f",
+                        "background": "#131313",
+                        "outline": "#919191",
+                        "outline-variant": "#474747",
+                    },
+                    fontFamily: {
+                        headline: ["Noto Serif"],
+                        body: ["Manrope"],
+                        label: ["Manrope"],
+                        mono: ["JetBrains Mono"],
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body { background-color: #131313; color: #e5e2e1; font-family: 'Manrope', sans-serif; -webkit-font-smoothing: antialiased; }
+        .font-serif { font-family: 'Noto Serif', serif; }
+        ::selection { background-color: #e5e2e1; color: #131313; }
+        .nav-menu { display: none; }
+        .nav-menu.open { display: flex; }
+        @media (min-width: 768px) { .nav-menu { display: flex !important; } .nav-toggle { display: none !important; } }
+        .prose-custom h2 { font-family: 'Noto Serif', serif; font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 1rem; }
+        .prose-custom h3 { font-family: 'Noto Serif', serif; font-size: 1.2rem; margin-top: 1.75rem; margin-bottom: 0.75rem; }
+        .prose-custom p { margin-bottom: 1rem; line-height: 1.75; color: #c6c6c6; }
+        .prose-custom ul, .prose-custom ol { margin-bottom: 1rem; padding-left: 1.5rem; color: #c6c6c6; }
+        .prose-custom li { margin-bottom: 0.25rem; line-height: 1.7; }
+        .prose-custom a { color: #e5e2e1; text-decoration: underline; }
+        .prose-custom code { background: #2a2a2a; padding: 2px 6px; border-radius: 3px; font-family: 'JetBrains Mono', monospace; font-size: 0.875em; }
+        .prose-custom pre { background: #1c1b1b; border: 1px solid #474747; padding: 1rem 1.25rem; border-radius: 4px; overflow-x: auto; margin-bottom: 1.5rem; }
+        .prose-custom pre code { background: transparent; padding: 0; font-size: 0.875rem; line-height: 1.65; }
+        .prose-custom blockquote { border-left: 2px solid #474747; padding-left: 1rem; margin: 1rem 0; font-style: italic; color: #c6c6c6; }
+        .prose-custom strong { color: #e5e2e1; }
+        .highlight .c, .highlight .cm, .highlight .c1 { color: #6b6b6b; font-style: italic; }
+        .highlight .k, .highlight .kd, .highlight .kn, .highlight .kr { color: #c6c6c6; font-weight: 600; }
+        .highlight .s, .highlight .s1, .highlight .s2 { color: #b5d6b5; }
+        .highlight .mi, .highlight .mf { color: #d6c6b5; }
+        .highlight .nf, .highlight .nc { color: #e5e2e1; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+
+<nav class="sticky top-0 z-50 bg-[#131313]/90 backdrop-blur-md border-b border-outline-variant/30">
+    <div class="flex justify-between items-center w-full px-8 py-5 max-w-screen-2xl mx-auto">
+        <a href="/" class="text-xl font-serif tracking-tighter hover:opacity-70 transition-opacity">← Home</a>
+        <button class="nav-toggle flex flex-col gap-[5px] md:hidden" aria-label="Toggle navigation" onclick="document.querySelector('.nav-menu').classList.toggle('open')">
+            <span class="block w-5 h-[2px] bg-on-surface"></span>
+            <span class="block w-5 h-[2px] bg-on-surface"></span>
+            <span class="block w-5 h-[2px] bg-on-surface"></span>
+        </button>
+        <div class="nav-menu flex-col md:flex-row absolute md:relative top-full left-0 right-0 md:top-auto bg-[#131313]/98 md:bg-transparent items-center gap-8 px-8 py-4 md:p-0 border-b md:border-0 border-outline-variant/30">
+            <a class="text-xs tracking-[0.15em] uppercase text-on-surface-variant hover:text-on-surface transition-colors py-2 md:py-0" href="/#experience">Experience</a>
+            <a class="text-xs tracking-[0.15em] uppercase text-on-surface-variant hover:text-on-surface transition-colors py-2 md:py-0" href="/#projects">Projects</a>
+            <a class="text-xs tracking-[0.15em] uppercase text-on-surface-variant hover:text-on-surface transition-colors py-2 md:py-0" href="/leetcode/">Leetcode</a>
+            <a class="text-xs tracking-[0.15em] uppercase text-on-surface-variant hover:text-on-surface transition-colors py-2 md:py-0" href="/delft/">Delft</a>
+            <a class="text-xs tracking-[0.15em] uppercase text-on-surface-variant hover:text-on-surface transition-colors py-2 md:py-0" href="/#contact">Contact</a>
+        </div>
+    </div>
+</nav>
+
+<main class="max-w-screen-2xl mx-auto px-8">
+    <article class="py-16 max-w-3xl mx-auto">
+    <a href="/delft/" class="text-xs tracking-[0.2em] uppercase text-on-surface-variant hover:text-on-surface transition-colors">&larr; All posts</a>
+    <div class="mt-8 mb-12 pb-8 border-b border-outline-variant">
+        <h1 class="text-4xl md:text-5xl font-serif leading-tight tracking-tighter">큰 모델은 어떻게 학습시키는가 — Week 2~4 정리</h1>
+        
+        <p class="text-lg text-on-surface-variant mt-4 leading-relaxed">분산 딥러닝, Flash Attention, Megatron-LM 강의에서 배운 거 정리. 처음엔 다 따로 노는 주제 같았는데 같이 보니까 한 묶음이더라.</p>
+        
+    </div>
+    <div class="prose-custom">
+        <p>요즘 LLM은 파라미터가 수천억 개다. GPU 한 장에 안 들어가는 건 당연하고, 들어간다 쳐도 학습 끝나는 거 보려면 평생 기다려야 한다. 그래서 여러 GPU에 일을 나눠야 되는데, 이 “나눈다”는 게 막상 보면 생각보다 까다롭다.</p>
+
+<p>Week 2~4 동안 분산 학습 관련해서 세 가지 주제를 들었다. 분산 학습 기본기, Flash Attention, Megatron-LM. 처음엔 다 따로 노는 주제 같았는데 정리해보니까 한 묶음이라서 같이 적는다.</p>
+
+<h2 id="1-왜-분산이-필요한가">1. 왜 분산이 필요한가</h2>
+
+<p>Kaplan(2020)의 <strong>Neural Scaling Laws</strong> 얘기부터. 모델 크기, 데이터, 컴퓨트를 같이 키우면 손실이 power-law로 줄어든다. 셋 다 같이 키워야지 하나만 키우면 효율이 안 난다.</p>
+
+<p>근데 문제는 하드웨어가 이걸 못 따라온다는 거다.</p>
+
+<ul>
+  <li>Transformer 모델 크기: 2년에 240배</li>
+  <li>GPU 메모리: 2년에 2배</li>
+  <li>인터커넥트 대역폭: 2년에 1.4배</li>
+</ul>
+
+<p>연산력(FLOPs)은 그래도 빨라지는데 DRAM이랑 인터커넥트가 못 따라온다. 이게 “Memory Wall”이다. 결국 한 GPU에 모델이 안 들어가고, 들어가도 학습이 너무 오래 걸린다. 그래서 GPU 여러 장 묶어서 협력시켜야 한다.</p>
+
+<h2 id="2-sgd-한-줄-복습">2. SGD 한 줄 복습</h2>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>g_t = (1/B) Σ_b ∇f_b(w_{t-1})
+w_t = w_{t-1} − α_t · g_t
+</code></pre></div></div>
+
+<p>step size를 감쇠시키면 <code class="language-plaintext highlighter-rouge">O(1/log t)</code>로, 고정이면 <code class="language-plaintext highlighter-rouge">O(1/t) + O(α)</code>로 수렴. 이 정도만 알고 넘어가자.</p>
+
+<h2 id="3-데이터-병렬-data-parallelism">3. 데이터 병렬 (Data Parallelism)</h2>
+
+<p>가장 직관적인 방법이다. <strong>모델은 전부 복제하고, 미니배치만 GPU 수대로 쪼개서 나눠준다.</strong> 각 GPU가 자기 데이터로 local gradient 계산하고, 마지막에 다 모아서 평균낸다. 이 “다 모아서 평균낸다”가 <strong>All-Reduce</strong>.</p>
+
+<h3 id="all-reduce를-구현하는-세-가지-방법">All-Reduce를 구현하는 세 가지 방법</h3>
+
+<p><strong>(a) Single Master</strong>
+한 GPU를 마스터로 정해서 거기로 다 보낸다. 마스터가 더해서 다시 뿌린다. 단순한데, GPU가 늘면 마스터로 들어오는 트래픽이 폭발한다. 안 쓰는 이유.</p>
+
+<p><strong>(b) Decentralized (마스터 없음)</strong>
+마스터 없이 각자가 N/P 조각을 다른 모든 GPU에 보낸다. 각자 자기 책임 chunk를 합산해서 다시 다 뿌린다. 각 GPU 트래픽이 <code class="language-plaintext highlighter-rouge">2(P−1)N/P</code>로 줄어든다. 근데 fan-in은 여전히 (P−1)이라 한계가 있다.</p>
+
+<p><strong>(c) Ring All-Reduce ← 실제로 가장 많이 씀</strong>
+GPU들을 ring으로 연결해서, 매 라운드마다 N/P 조각만 옆 GPU로 넘긴다. (P−1) 라운드 reduce-scatter + (P−1) 라운드 all-gather, 합쳐서 <code class="language-plaintext highlighter-rouge">2(P−1)</code> 라운드. fan-in이 항상 1이라서 GPU 늘려도 GPU당 트래픽이 거의 안 변한다. 대신 라운드 수가 P에 비례하니까 P가 너무 커지면 latency가 쌓인다.</p>
+
+<p>통신 비용 정리하면:</p>
+
+<ul>
+  <li>파라미터 서버: <code class="language-plaintext highlighter-rouge">T_comm = α + PNβ</code></li>
+  <li>Ring All-Reduce: <code class="language-plaintext highlighter-rouge">T_comm = 2((P−1)α + ((P−1)/P)·Nβ)</code></li>
+</ul>
+
+<p>α는 latency, β = 1/bandwidth.</p>
+
+<h3 id="데이터-병렬의-한계">데이터 병렬의 한계</h3>
+
+<p>데이터 병렬로 쓸 수 있는 GPU는 batch size B까지가 한계다. 그 이상은 못 쓴다. 그러면 batch를 키우면 되지 않냐 싶은데, 너무 키우면 generalization gap이 생긴다. validation error가 오른다는 얘기. “sharp minima” 가설로 설명한다.</p>
+
+<p><strong>Linear Scaling Rule</strong> (lr을 batch에 비례해서 키우기, warmup 필수)로 어느 정도 보완은 되는데 한계가 있다. ResNet-50 + ImageNet 기준, 8k batch까지는 괜찮고 16k 넘어가면 정확도 떨어진다.</p>
+
+<h3 id="비동기-학습-잠깐">비동기 학습 잠깐</h3>
+
+<p>워커가 PS에 gradient를 비동기로 push하면 blocking이 없어서 GPU 활용도가 올라간다. 근데 stale gradient 때문에 수렴이 불안정해진다. 지도학습에서는 거의 안 쓰고 synchronous로 갔다. RL에서는 아직 쓴다.</p>
+
+<h2 id="4-모델-병렬-model-parallelism">4. 모델 병렬 (Model Parallelism)</h2>
+
+<p>데이터 병렬이 한계에 부딪치면 결국 모델 자체를 쪼개야 한다. 두 가지 방식이 있다.</p>
+
+<ul>
+  <li><strong>Pipeline Parallelism</strong>: 레이어를 stage로 쪼개서 GPU 사이에 파이프라인으로 흘림. GPipe가 대표적. 단점은 bubble — 놀고 있는 시간이 생긴다.</li>
+  <li><strong>Tensor Parallelism</strong>: 한 레이어 안의 weight를 GPU들이 나눠서 가짐.</li>
+  <li><strong>3D Parallelism</strong>: 위 둘 + 데이터 병렬을 다 합친 거. GPT-3, GPT-4가 이 방식.</li>
+</ul>
+
+<h3 id="tensor-parallelism-통신-비용-fc-레이어">Tensor Parallelism 통신 비용 (FC 레이어)</h3>
+
+<p>W를 출력 차원으로 P등분해서 각 GPU가 <code class="language-plaintext highlighter-rouge">W_p</code>를 가진다고 하자.</p>
+
+<ul>
+  <li>Forward — activation을 All-Gather 해야 함. 비용 <code class="language-plaintext highlighter-rouge">β(P−1)·B·d_i / P</code></li>
+  <li>Backward 가중치 gradient <code class="language-plaintext highlighter-rouge">∇W_p = ∇Y_p · X^T</code> — 로컬에서 끝남, 통신 없음</li>
+  <li>Backward 입력 gradient <code class="language-plaintext highlighter-rouge">∇X = Σ_p W_p^T · ∇Y_p</code> — All-Reduce 필요. 비용 <code class="language-plaintext highlighter-rouge">2β(P−1)·B·d_i / P</code></li>
+</ul>
+
+<h3 id="data-vs-tensor-비교">Data vs Tensor 비교</h3>
+
+<ul>
+  <li>Data: <code class="language-plaintext highlighter-rouge">T ∝ d_i² / P</code> — 가중치 크기에 quadratic</li>
+  <li>Tensor: <code class="language-plaintext highlighter-rouge">T ∝ B · d_i / P</code> — 활성화 크기에 linear</li>
+</ul>
+
+<p>FC가 진짜 넓은 경우 (<code class="language-plaintext highlighter-rouge">d_i ≫ B</code>) tensor가 훨씬 유리하다. 반대 상황이면 data가 유리하고. 그래서 골라쓰는 거다.</p>
+
+<h2 id="5-메모리--진짜-빡빡함">5. 메모리 — 진짜 빡빡함</h2>
+
+<p>Mixed precision + Adam, 파라미터 M개 기준 GPU 한 장당:</p>
+
+<ul>
+  <li>FP16 파라미터: 2M</li>
+  <li>FP16 gradient: 2M</li>
+  <li>FP32 optimizer states (param master + momentum + variance + grad master): 16M</li>
+  <li><strong>합계 20M bytes / GPU</strong></li>
+</ul>
+
+<p>1B 파라미터면 20GB/GPU. 여기에 activation은 또 따로 든다. 그래서 <strong>ZeRO</strong> 계열이 나온 거다. optimizer states, gradients, parameters를 복제하지 말고 GPU 간에 partition하자는 아이디어. CPU/NVMe로 offload하는 ZeRO-Infinity, 계산이랑 통신을 prefetching으로 overlap하는 거까지 다 끌어다 쓴다.</p>
+
+<h3 id="1부-핵심만-다시">1부 핵심만 다시</h3>
+
+<p>데이터 병렬은 쉬운데 큰 모델엔 안 맞고 generalization 한계가 있다. Tensor 병렬은 넓은 FC에서 유리하고, pipeline 병렬은 깊은 모델에 유리하다. 실제 LLM 학습은 셋 다 섞고 거기에 ZeRO + mixed precision을 얹는다. 끝.</p>
+
+<hr />
+
+<h1 id="flash-attention">Flash Attention</h1>
+
+<h2 id="1-배경--context-길이-폭발">1. 배경 — context 길이 폭발</h2>
+
+<p>GPT-1이 512, GPT-3이 2K, GPT-4가 128K, Claude가 200K. Context length가 진짜 빠르게 커지고 있다. 근데 attention은 시간/공간 복잡도가 시퀀스 길이 n에 대해 <strong>O(n²)</strong> 이다. 길어질수록 attention이 병목이 된다.</p>
+
+<h2 id="2-gpu-메모리-계층">2. GPU 메모리 계층</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>종류</th>
+      <th>용량</th>
+      <th>대역폭</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Registers</td>
+      <td>64 KB</td>
+      <td>19 TB/s</td>
+    </tr>
+    <tr>
+      <td>SRAM (L1/공유)</td>
+      <td>20 MB</td>
+      <td>매우 빠름</td>
+    </tr>
+    <tr>
+      <td>HBM (글로벌)</td>
+      <td>40 GB</td>
+      <td>1.5 TB/s</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>가속기가 빨라질수록 메모리가 더 큰 병목이 된다. Flash Attention의 출발점이 <strong>“FLOPs 줄이지 말고 HBM 읽기/쓰기 횟수(IO)를 줄이자”</strong> 인 이유다.</p>
+
+<h2 id="3-attention의-비대칭성">3. Attention의 비대칭성</h2>
+
+<p>표준 attention:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>W_{i,j} = exp(Q_i · K_j)
+SoftMax(Q_i; K_1,…,K_n) = W_i / Σ_l W_{i,l}
+O = SoftMax(Q K^T) V
+</code></pre></div></div>
+
+<p>출력 <code class="language-plaintext highlighter-rouge">O_i</code>는 자기 <code class="language-plaintext highlighter-rouge">Q_i</code> 하나만 쓰는데, 정규화는 <strong>모든 K가 있어야</strong> 가능하다. 이 비대칭성 때문에 단순히 쪼개기가 어려운 거다.</p>
+
+<h2 id="4-그래서-어떻게-하냐면">4. 그래서 어떻게 하냐면</h2>
+
+<p>두 가지 아이디어가 핵심.</p>
+
+<ol>
+  <li>SRAM으로 데이터 한 번 가져왔으면 거기서 끝까지 다 처리해버린다 (aggressive fusion).</li>
+  <li>K, V를 블록 단위로 SRAM에 올리고, 부분 출력 P랑 정규화 합 z를 <strong>running aggregate</strong>로 들고 다닌다.</li>
+</ol>
+
+<p>블록 한 번 처리할 때 이런 일이 일어난다.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Load(K_t, V_t)
+A_t = exp(Q_i · K_t^T)               # attention score
+z_t = z_{t-1} + A_t.sum(-1)          # 정규화 running sum 누적
+P_t = A_t · V_t / z_t                # 새 부분 출력
+P_t = P_t + (z_{t-1} / z_t) · P_{t-1}  # 이전 출력 다시 정규화
+Free(K_t, V_t, A_t, ...)
+</code></pre></div></div>
+
+<p>마지막 블록의 <code class="language-plaintext highlighter-rouge">P_t</code>가 최종 <code class="language-plaintext highlighter-rouge">O_i</code>가 된다. softmax가 부분합으로 정확히 합쳐지는 형태(algebraic aggregation, Jim Gray 1997)라서 이 트릭이 먹힌다.</p>
+
+<h2 id="5-성능">5. 성능</h2>
+
+<ul>
+  <li>6~10배 속도 향상</li>
+  <li>10~20배 메모리 절감 (시퀀스 길수록 효과 더 큼)</li>
+  <li>A100 utilization 최대 72% (PyTorch 표준 15 TFLOPs/s → FlashAttention-2가 16k seq에서 171 TFLOPs/s)</li>
+  <li>그러면서 <strong>근사 없이 정확한 attention.</strong> MLPerf 우승자들이 다 쓴다.</li>
+</ul>
+
+<h2 id="6-결국">6. 결국</h2>
+
+<p>가속기 시대엔 FLOPs가 병목이 아니다. 메모리 IO가 병목이다. 블록화 + 융합 + algebraic aggregation으로 메모리 대역폭을 살리는 게 핵심.</p>
+
+<hr />
+
+<h1 id="megatron-lm-nvidia-2019">Megatron-LM (NVIDIA, 2019)</h1>
+
+<p>NVIDIA가 만든 수십억 파라미터 transformer 학습 프레임워크. 핵심은 <strong>tensor parallelism을 transformer block 구조에 딱 맞게 깔끔히 구현했다는 거</strong>다. <a href="https://arxiv.org/abs/1909.08053">Paper</a>, <a href="https://github.com/NVIDIA/Megatron-LM">Repo</a>.</p>
+
+<h2 id="1-gemm-쪼개는-두-가지-방법">1. GEMM 쪼개는 두 가지 방법</h2>
+
+<p><code class="language-plaintext highlighter-rouge">Y = X · A</code>를 두 GPU에 쪼갠다고 하자. 두 가지 방법이 있다.</p>
+
+<p><strong>(a) Row Parallel</strong> — A를 row-wise로, X를 column-wise로</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">X = [X_1, X_2]</code>, <code class="language-plaintext highlighter-rouge">A = [A_1; A_2]</code></li>
+  <li>각 GPU가 <code class="language-plaintext highlighter-rouge">X_i · A_i</code> 계산 → 결과는 부분합. <code class="language-plaintext highlighter-rouge">Y = Y_1 + Y_2</code></li>
+  <li>forward에 <strong>All-Reduce 필요</strong></li>
+</ul>
+
+<p><strong>(b) Column Parallel</strong> — A를 column-wise로, X는 복제</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">A = [A_1, A_2]</code></li>
+  <li>각 GPU가 <code class="language-plaintext highlighter-rouge">X · A_i</code> 계산 → <code class="language-plaintext highlighter-rouge">Y = [Y_1, Y_2]</code>로 자연스럽게 분할</li>
+  <li>forward엔 통신 없음. backward에만 All-Reduce 필요</li>
+</ul>
+
+<h2 id="2-f-g-operator">2. f, g operator</h2>
+
+<p>통신 패턴을 깔끔히 묶은 두 operator.</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">f</code>: forward에 identity, backward에 all-reduce</li>
+  <li><code class="language-plaintext highlighter-rouge">g</code>: forward에 all-reduce, backward에 identity</li>
+</ul>
+
+<p>f랑 g가 서로 conjugate. 분산 transformer 코드 보면 이 두 개가 뼈대다.</p>
+
+<h2 id="3-transformer-block에-어떻게-적용하냐면">3. Transformer block에 어떻게 적용하냐면</h2>
+
+<p><strong>MLP block</strong> (<code class="language-plaintext highlighter-rouge">Y = GeLU(XA)</code>, <code class="language-plaintext highlighter-rouge">Z = Dropout(Y · B)</code>):</p>
+
+<p>순진하게 row + column로 자르면 GeLU 직전에 동기화 한 번 더 들어가야 한다. “GeLU of sums ≠ sum of GeLUs” 이거 때문에. Megatron은 이렇게 푼다.</p>
+
+<ul>
+  <li>첫 GEMM은 column-parallel — <code class="language-plaintext highlighter-rouge">A = [A_1, A_2]</code></li>
+  <li>GeLU는 element-wise라서 분할된 채로 그냥 통과시킴</li>
+  <li>두 번째 GEMM은 row-parallel — <code class="language-plaintext highlighter-rouge">B = [B_1; B_2]</code></li>
+  <li>마지막에 한 번만 all-reduce</li>
+</ul>
+
+<p>→ MLP block당 forward 1 + backward 1 = <strong>2 all-reduce</strong></p>
+
+<p><strong>Self-attention block</strong>:</p>
+
+<p>Multi-head라서 column-parallel이 자연스러움 — head를 GPU에 나눠준다. Q/K/V projection은 column-parallel, 마지막 output projection은 row-parallel.</p>
+
+<p>→ attention block당 <strong>2 all-reduce</strong></p>
+
+<p><strong>한 transformer 레이어 전체 = 4 all-reduce</strong> (MLP 2 + attention 2).</p>
+
+<h2 id="4-설계-원칙">4. 설계 원칙</h2>
+
+<ul>
+  <li>math-heavy operation을 묶어서 동기화 지점을 최소화</li>
+  <li>pre-existing NCCL / PyTorch primitive만 사용 — native PyTorch로 구현 가능했다는 게 포인트</li>
+  <li>Volta tensor core로 mixed precision</li>
+</ul>
+
+<h2 id="5-결과--weak-scaling">5. 결과 — Weak Scaling</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Config</th>
+      <th>Hidden</th>
+      <th>Heads</th>
+      <th>Layers</th>
+      <th>Params</th>
+      <th>MP GPUs</th>
+      <th>MP+DP GPUs</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>1</td>
+      <td>1536</td>
+      <td>16</td>
+      <td>40</td>
+      <td>1.2B</td>
+      <td>1</td>
+      <td>64</td>
+    </tr>
+    <tr>
+      <td>2</td>
+      <td>1920</td>
+      <td>20</td>
+      <td>54</td>
+      <td>2.5B</td>
+      <td>2</td>
+      <td>128</td>
+    </tr>
+    <tr>
+      <td>3</td>
+      <td>2304</td>
+      <td>24</td>
+      <td>64</td>
+      <td>4.2B</td>
+      <td>4</td>
+      <td>256</td>
+    </tr>
+    <tr>
+      <td>4</td>
+      <td>3072</td>
+      <td>32</td>
+      <td>72</td>
+      <td>8.3B</td>
+      <td>8</td>
+      <td>512</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>Model parallel (1→8 GPU): 100% → 77%</li>
+  <li>Model + Data parallel (64→512 GPU): 96% → 74%</li>
+  <li>baseline 1.2B 모델: 39 TFLOPs/s (이론 peak의 30%)</li>
+  <li>8.3B 파라미터를 512 GPU로 74% 효율 — 당시 사상 최대 규모 NLP 모델</li>
+</ul>
+
+<h2 id="6-결국-1">6. 결국</h2>
+
+<p>Transformer GEMM 패턴에 맞춰 column-parallel이랑 row-parallel을 페어로 묶으면, 레이어당 NCCL all-reduce 4번만으로 수십억 파라미터 모델을 native PyTorch에서 학습할 수 있다.</p>
+
+<hr />
+
+<h2 id="세-강의를-묶으면">세 강의를 묶으면</h2>
+
+<ul>
+  <li><strong>Week 2~3</strong>에서 데이터/모델 병렬이랑 collective 통신(all-reduce, all-gather)의 기초를 배운다. Homework 1, 2가 정확히 이 내용.</li>
+  <li><strong>Megatron-LM</strong>은 그 tensor parallelism을 transformer에 실제로 적용한 사례. column/row parallel을 페어로 묶는 게 진짜 깔끔하다.</li>
+  <li><strong>Flash Attention</strong>은 같은 transformer를 단일 GPU 안에서 메모리 계층 관점으로 다시 본 거다. 분산이 아니라 IO 최소화가 주제.</li>
+</ul>
+
+<p>결국 요즘 LLM 학습은 <strong>Megatron류 tensor 병렬 (GPU 간) + Flash Attention류 IO-aware kernel (GPU 안) + ZeRO류 메모리 관리</strong> 이 셋의 합작품이다. 처음엔 따로 노는 주제 같았는데 한 번에 보니까 정말 같은 문제의 다른 면들이더라.</p>
+
+    </div>
+</article>
+
+</main>
+
+<footer class="w-full py-10 border-t border-outline-variant mt-16">
+    <div class="flex justify-between items-center px-8 max-w-screen-2xl mx-auto">
+        <span class="text-xs tracking-widest uppercase text-on-surface-variant">&copy; 2026 Tae Yong Kwon</span>
+    </div>
+</footer>
+
+</body>
+</html>

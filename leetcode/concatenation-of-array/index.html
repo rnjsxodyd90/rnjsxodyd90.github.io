@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>1929. Concatenation of Array | Tae Yong Kwon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ffffff",
+                        "on-primary": "#1a1c1c",
+                        "on-surface": "#e5e2e1",
+                        "on-surface-variant": "#c6c6c6",
+                        "surface-container-high": "#2a2a2a",
+                        "surface-container-low": "#1c1b1b",
+                        "surface-container": "#201f1f",
+                        "background": "#131313",
+                        "outline": "#919191",
+                        "outline-variant": "#474747",
+                    },
+                    fontFamily: {
+                        headline: ["Noto Serif"],
+                        body: ["Manrope"],
+                        label: ["Manrope"],
+                        mono: ["JetBrains Mono"],
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body { background-color: #131313; color: #e5e2e1; font-family: 'Manrope', sans-serif; -webkit-font-smoothing: antialiased; }
+        .font-serif { font-family: 'Noto Serif', serif; }
+        ::selection { background-color: #e5e2e1; color: #131313; }
+        .nav-menu { display: none; }
+        .nav-menu.open { display: flex; }
+        @media (min-width: 768px) { .nav-menu { display: flex !important; } .nav-toggle { display: none !important; } }
+        .prose-custom h2 { font-family: 'Noto Serif', serif; font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 1rem; }
+        .prose-custom h3 { font-family: 'Noto Serif', serif; font-size: 1.2rem; margin-top: 1.75rem; margin-bottom: 0.75rem; }
+        .prose-custom p { margin-bottom: 1rem; line-height: 1.75; color: #c6c6c6; }
+        .prose-custom ul, .prose-custom ol { margin-bottom: 1rem; padding-left: 1.5rem; color: #c6c6c6; }
+        .prose-custom li { margin-bottom: 0.25rem; line-height: 1.7; }
+        .prose-custom a { color: #e5e2e1; text-decoration: underline; }
+        .prose-custom code { background: #2a2a2a; padding: 2px 6px; border-radius: 3px; font-family: 'JetBrains Mono', monospace; font-size: 0.875em; }
+        .prose-custom pre { background: #1c1b1b; border: 1px solid #474747; padding: 1rem 1.25rem; border-radius: 4px; overflow-x: auto; margin-bottom: 1.5rem; }
+        .prose-custom pre code { background: transparent; padding: 0; font-size: 0.875rem; line-height: 1.65; }
+        .prose-custom blockquote { border-left: 2px solid #474747; padding-left: 1rem; margin: 1rem 0; font-style: italic; color: #c6c6c6; }
+        .prose-custom strong { color: #e5e2e1; }
+        .highlight .c, .highlight .cm, .highlight .c1 { color: #6b6b6b; font-style: italic; }
+        .highlight .k, .highlight .kd, .highlight .kn, .highlight .kr { color: #c6c6c6; font-weight: 600; }
+        .highlight .s, .highlight .s1, .highlight .s2 { color: #b5d6b5; }
+        .highlight .mi, .highlight .mf { color: #d6c6b5; }
+        .highlight .nf, .highlight .nc { color: #e5e2e1; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+
+<nav class="sticky top-0 z-50 bg-[#131313]/90 backdrop-blur-md border-b border-outline-variant/30">
+    <div class="flex justify-between items-center w-full px-8 py-5 max-w-screen-2xl mx-auto">
+        <a href="/" class="text-xl font-serif tracking-tighter hover:opacity-70 transition-opacity">← Home</a>
+        <button class="nav-toggle flex flex-col gap-[5px] md:hidden" aria-label="Toggle navigation" onclick="document.querySelector('.nav-menu').classList.toggle('open')">
+            <span class="block w-5 h-[2px] bg-on-surface"></span>
+            <span class="block w-5 h-[2px] bg-on-surface"></span>
+            <span class="block w-5 h-[2px] bg-on-surface"></span>
+        </button>
+        <div class="nav-menu flex-col md:flex-row absolute md:relative top-full left-0 right-0 md:top-auto bg-[#131313]/98 md:bg-transparent items-center gap-8 px-8 py-4 md:p-0 border-b md:border-0 border-outline-variant/30">
+            <a class="text-xs tracking-[0.15em] uppercase text-on-surface-variant hover:text-on-surface transition-colors py-2 md:py-0" href="/#experience">Experience</a>
+            <a class="text-xs tracking-[0.15em] uppercase text-on-surface-variant hover:text-on-surface transition-colors py-2 md:py-0" href="/#projects">Projects</a>
+            <a class="text-xs tracking-[0.15em] uppercase text-on-surface-variant hover:text-on-surface transition-colors py-2 md:py-0" href="/leetcode/">Leetcode</a>
+            <a class="text-xs tracking-[0.15em] uppercase text-on-surface-variant hover:text-on-surface transition-colors py-2 md:py-0" href="/delft/">Delft</a>
+            <a class="text-xs tracking-[0.15em] uppercase text-on-surface-variant hover:text-on-surface transition-colors py-2 md:py-0" href="/#contact">Contact</a>
+        </div>
+    </div>
+</nav>
+
+<main class="max-w-screen-2xl mx-auto px-8">
+    <article class="py-16 max-w-3xl mx-auto">
+    <a href="/leetcode/" class="text-xs tracking-[0.2em] uppercase text-on-surface-variant hover:text-on-surface transition-colors">&larr; All solutions</a>
+    <div class="mt-8 mb-12 pb-8 border-b border-outline-variant">
+        <span class="text-xs tracking-widest text-outline uppercase">April 23, 2026 &middot; Easy</span>
+        <h1 class="text-4xl md:text-5xl font-serif mt-3 leading-tight tracking-tighter">1929. Concatenation of Array</h1>
+        
+        <a href="https://leetcode.com/problems/concatenation-of-array/" target="_blank" class="text-sm text-on-surface-variant hover:text-on-surface transition-colors mt-4 inline-block">View problem on LeetCode &rarr;</a>
+        
+    </div>
+    <div class="prose-custom">
+        <h2 id="approach">Approach</h2>
+
+<p>The output array is twice the length of <code class="language-plaintext highlighter-rouge">nums</code>. Iterate from <code class="language-plaintext highlighter-rouge">0</code> to <code class="language-plaintext highlighter-rouge">2n</code>, and for each index <code class="language-plaintext highlighter-rouge">i</code> append <code class="language-plaintext highlighter-rouge">nums[i % n]</code>. The modulo wraps the index back to <code class="language-plaintext highlighter-rouge">0</code> once we cross the original length, which naturally produces the concatenation in a single loop.</p>
+
+<p>O(n) time, O(n) space for the output.</p>
+
+<h2 id="solution">Solution</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">class</span> <span class="nc">Solution</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">getConcatenation</span><span class="p">(</span><span class="n">self</span><span class="p">,</span> <span class="n">nums</span><span class="p">):</span>
+        <span class="sh">"""</span><span class="s">
+        :type nums: List[int]
+        :rtype: List[int]
+        </span><span class="sh">"""</span>
+        <span class="n">ans</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nf">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="nf">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)):</span>
+            <span class="n">ans</span><span class="p">.</span><span class="nf">append</span><span class="p">(</span><span class="n">nums</span><span class="p">[</span><span class="n">i</span> <span class="o">%</span> <span class="nf">len</span><span class="p">(</span><span class="n">nums</span><span class="p">)])</span>
+        <span class="k">return</span> <span class="n">ans</span>
+</code></pre></div></div>
+
+<h2 id="personal-review">Personal review</h2>
+
+<p>I knew that I had to iterate <code class="language-plaintext highlighter-rouge">nums</code>, and the length of <code class="language-plaintext highlighter-rouge">nums</code> had to be somehow related to that range. I then tried <code class="language-plaintext highlighter-rouge">+=</code> and it didn’t work because the string was not iterable. Then I just appended and it worked. <code class="language-plaintext highlighter-rouge">%</code> allows me to reset the range and start from 0.</p>
+
+    </div>
+</article>
+
+</main>
+
+<footer class="w-full py-10 border-t border-outline-variant mt-16">
+    <div class="flex justify-between items-center px-8 max-w-screen-2xl mx-auto">
+        <span class="text-xs tracking-widest uppercase text-on-surface-variant">&copy; 2026 Tae Yong Kwon</span>
+    </div>
+</footer>
+
+</body>
+</html>

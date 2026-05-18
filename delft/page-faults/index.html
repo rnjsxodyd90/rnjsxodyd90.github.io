@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>페이지 폴트가 뭐고 왜 신경써야 하나 | Tae Yong Kwon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ffffff",
+                        "on-primary": "#1a1c1c",
+                        "on-surface": "#e5e2e1",
+                        "on-surface-variant": "#c6c6c6",
+                        "surface-container-high": "#2a2a2a",
+                        "surface-container-low": "#1c1b1b",
+                        "surface-container": "#201f1f",
+                        "background": "#131313",
+                        "outline": "#919191",
+                        "outline-variant": "#474747",
+                    },
+                    fontFamily: {
+                        headline: ["Noto Serif"],
+                        body: ["Manrope"],
+                        label: ["Manrope"],
+                        mono: ["JetBrains Mono"],
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body { background-color: #131313; color: #e5e2e1; font-family: 'Manrope', sans-serif; -webkit-font-smoothing: antialiased; }
+        .font-serif { font-family: 'Noto Serif', serif; }
+        ::selection { background-color: #e5e2e1; color: #131313; }
+        .nav-menu { display: none; }
+        .nav-menu.open { display: flex; }
+        @media (min-width: 768px) { .nav-menu { display: flex !important; } .nav-toggle { display: none !important; } }
+        .prose-custom h2 { font-family: 'Noto Serif', serif; font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 1rem; }
+        .prose-custom h3 { font-family: 'Noto Serif', serif; font-size: 1.2rem; margin-top: 1.75rem; margin-bottom: 0.75rem; }
+        .prose-custom p { margin-bottom: 1rem; line-height: 1.75; color: #c6c6c6; }
+        .prose-custom ul, .prose-custom ol { margin-bottom: 1rem; padding-left: 1.5rem; color: #c6c6c6; }
+        .prose-custom li { margin-bottom: 0.25rem; line-height: 1.7; }
+        .prose-custom a { color: #e5e2e1; text-decoration: underline; }
+        .prose-custom code { background: #2a2a2a; padding: 2px 6px; border-radius: 3px; font-family: 'JetBrains Mono', monospace; font-size: 0.875em; }
+        .prose-custom pre { background: #1c1b1b; border: 1px solid #474747; padding: 1rem 1.25rem; border-radius: 4px; overflow-x: auto; margin-bottom: 1.5rem; }
+        .prose-custom pre code { background: transparent; padding: 0; font-size: 0.875rem; line-height: 1.65; }
+        .prose-custom blockquote { border-left: 2px solid #474747; padding-left: 1rem; margin: 1rem 0; font-style: italic; color: #c6c6c6; }
+        .prose-custom strong { color: #e5e2e1; }
+        .highlight .c, .highlight .cm, .highlight .c1 { color: #6b6b6b; font-style: italic; }
+        .highlight .k, .highlight .kd, .highlight .kn, .highlight .kr { color: #c6c6c6; font-weight: 600; }
+        .highlight .s, .highlight .s1, .highlight .s2 { color: #b5d6b5; }
+        .highlight .mi, .highlight .mf { color: #d6c6b5; }
+        .highlight .nf, .highlight .nc { color: #e5e2e1; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+
+<nav class="sticky top-0 z-50 bg-[#131313]/90 backdrop-blur-md border-b border-outline-variant/30">
+    <div class="flex justify-between items-center w-full px-8 py-5 max-w-screen-2xl mx-auto">
+        <a href="/" class="text-xl font-serif tracking-tighter hover:opacity-70 transition-opacity">← Home</a>
+        <button class="nav-toggle flex flex-col gap-[5px] md:hidden" aria-label="Toggle navigation" onclick="document.querySelector('.nav-menu').classList.toggle('open')">
+            <span class="block w-5 h-[2px] bg-on-surface"></span>
+            <span class="block w-5 h-[2px] bg-on-surface"></span>
+            <span class="block w-5 h-[2px] bg-on-surface"></span>
+        </button>
+        <div class="nav-menu flex-col md:flex-row absolute md:relative top-full left-0 right-0 md:top-auto bg-[#131313]/98 md:bg-transparent items-center gap-8 px-8 py-4 md:p-0 border-b md:border-0 border-outline-variant/30">
+            <a class="text-xs tracking-[0.15em] uppercase text-on-surface-variant hover:text-on-surface transition-colors py-2 md:py-0" href="/#experience">Experience</a>
+            <a class="text-xs tracking-[0.15em] uppercase text-on-surface-variant hover:text-on-surface transition-colors py-2 md:py-0" href="/#projects">Projects</a>
+            <a class="text-xs tracking-[0.15em] uppercase text-on-surface-variant hover:text-on-surface transition-colors py-2 md:py-0" href="/leetcode/">Leetcode</a>
+            <a class="text-xs tracking-[0.15em] uppercase text-on-surface-variant hover:text-on-surface transition-colors py-2 md:py-0" href="/delft/">Delft</a>
+            <a class="text-xs tracking-[0.15em] uppercase text-on-surface-variant hover:text-on-surface transition-colors py-2 md:py-0" href="/#contact">Contact</a>
+        </div>
+    </div>
+</nav>
+
+<main class="max-w-screen-2xl mx-auto px-8">
+    <article class="py-16 max-w-3xl mx-auto">
+    <a href="/delft/" class="text-xs tracking-[0.2em] uppercase text-on-surface-variant hover:text-on-surface transition-colors">&larr; All posts</a>
+    <div class="mt-8 mb-12 pb-8 border-b border-outline-variant">
+        <h1 class="text-4xl md:text-5xl font-serif leading-tight tracking-tighter">페이지 폴트가 뭐고 왜 신경써야 하나</h1>
+        
+        <p class="text-lg text-on-surface-variant mt-4 leading-relaxed">페이지 폴트 = 메모리에 접근했는데 그게 물리 메모리에 없을 때 OS가 끼어드는 거. minor면 괜찮은데 major는 진짜 느리다.</p>
+        
+    </div>
+    <div class="prose-custom">
+        <p>OS 수업에서 페이지 폴트 처음 배울 때 “그래서 이게 뭔데” 싶었다. 정리해본다.</p>
+
+<h2 id="가상-메모리-한-줄-복습">가상 메모리 한 줄 복습</h2>
+
+<p>프로세스가 보는 메모리 주소는 <strong>가상 주소</strong>다. 실제 RAM의 물리 주소가 아니다. OS가 페이지 테이블이라는 매핑을 들고 있어서, 프로세스가 어떤 주소에 접근하면 그걸 실제 물리 주소로 번역해준다. (실제론 MMU가 하드웨어로 한다.)</p>
+
+<p>그래서 프로세스가 자기는 4GB짜리 연속된 메모리 갖고 있다고 착각해도, 실제론 RAM 여기저기 흩어져 있거나 일부는 디스크에 있을 수도 있다.</p>
+
+<h2 id="페이지-폴트가-일어나는-순간">페이지 폴트가 일어나는 순간</h2>
+
+<p>프로세스가 어떤 가상 주소에 접근했는데, 그 페이지가 <strong>물리 메모리에 없으면</strong> CPU가 trap을 발생시킨다. 이게 페이지 폴트다. OS가 끼어들어서 “야 이거 어떻게 처리할까” 결정한다.</p>
+
+<h2 id="minor-vs-major">Minor vs Major</h2>
+
+<p>페이지 폴트도 종류가 있다.</p>
+
+<p><strong>Minor fault (소프트 폴트)</strong>
+페이지가 사실 물리 메모리엔 있는데, 이 프로세스의 페이지 테이블에 매핑만 안 돼 있는 경우. 예를 들어:</p>
+
+<ul>
+  <li>다른 프로세스랑 공유하는 라이브러리(libc 같은 거)를 처음 접근할 때</li>
+  <li><code class="language-plaintext highlighter-rouge">fork()</code> 후 copy-on-write 페이지를 처음 쓸 때</li>
+  <li>페이지가 free list에 있다가 재할당되는 경우</li>
+</ul>
+
+<p>OS가 페이지 테이블만 업데이트해주면 끝. 빠르다. 마이크로초 단위.</p>
+
+<p><strong>Major fault (하드 폴트)</strong>
+페이지가 물리 메모리에 진짜로 없어서 <strong>디스크에서 읽어와야</strong> 하는 경우. swap에서 가져오거나, mmap한 파일을 처음 읽거나.</p>
+
+<p>이게 느리다. SSD라도 페이지 폴트 한 번에 수십~수백 마이크로초. HDD면 밀리초. 메모리 접근 (나노초)이랑 비교하면 수천~수만 배 차이다.</p>
+
+<h2 id="그래서-왜-신경써야-하나">그래서 왜 신경써야 하나</h2>
+
+<p>major fault가 많이 일어나면 프로그램이 갑자기 느려진다. CPU는 노는데 디스크만 돌고 있는 상황. 더 나쁜 경우는 thrashing — 메모리가 모자라서 OS가 페이지를 계속 swap in/out 하느라 진짜 일은 못 하는 상태.</p>
+
+<p>학습 코드에서 데이터셋이 RAM보다 크면 이거 자주 본다. 처음엔 빠르다가 어느 순간 갑자기 느려지는 거.</p>
+
+<h2 id="어떻게-확인하나-linux">어떻게 확인하나 (Linux)</h2>
+
+<div class="language-bash highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c"># 시스템 전체 폴트 통계</span>
+vmstat 1
+<span class="c"># si, so 컬럼이 swap in/out — 0보다 크면 major fault 발생 중</span>
+
+<span class="c"># 특정 프로세스의 폴트</span>
+ps <span class="nt">-o</span> pid,min_flt,maj_flt,cmd <span class="nt">-p</span> &lt;pid&gt;
+
+<span class="c"># perf로 세부 추적</span>
+perf <span class="nb">stat</span> <span class="nt">-e</span> page-faults,minor-faults,major-faults ./my_program
+</code></pre></div></div>
+
+<p><code class="language-plaintext highlighter-rouge">min_flt</code>는 누적 minor, <code class="language-plaintext highlighter-rouge">maj_flt</code>는 누적 major. 실행하면서 <code class="language-plaintext highlighter-rouge">maj_flt</code>가 계속 늘면 swap 들어가고 있다는 신호다.</p>
+
+<h2 id="줄이려면">줄이려면</h2>
+
+<ul>
+  <li>워킹셋을 물리 메모리 안에 들어가게 줄이거나</li>
+  <li>메모리 더 사거나</li>
+  <li><code class="language-plaintext highlighter-rouge">mmap</code>으로 파일 다룰 땐 <code class="language-plaintext highlighter-rouge">madvise(MADV_SEQUENTIAL)</code> 같은 힌트 주거나</li>
+  <li>mlock으로 중요한 페이지는 swap 못 나가게 고정</li>
+</ul>
+
+<p>대부분은 첫 번째다. 알고리즘이나 데이터 구조에서 메모리 더 적게 쓰게 만드는 게 보통 답이다.</p>
+
+    </div>
+</article>
+
+</main>
+
+<footer class="w-full py-10 border-t border-outline-variant mt-16">
+    <div class="flex justify-between items-center px-8 max-w-screen-2xl mx-auto">
+        <span class="text-xs tracking-widest uppercase text-on-surface-variant">&copy; 2026 Tae Yong Kwon</span>
+    </div>
+</footer>
+
+</body>
+</html>

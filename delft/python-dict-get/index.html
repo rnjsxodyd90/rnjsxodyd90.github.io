@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>파이썬 dict에서 값 꺼낼 땐 item['key']보다 .get() | Tae Yong Kwon</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#ffffff",
+                        "on-primary": "#1a1c1c",
+                        "on-surface": "#e5e2e1",
+                        "on-surface-variant": "#c6c6c6",
+                        "surface-container-high": "#2a2a2a",
+                        "surface-container-low": "#1c1b1b",
+                        "surface-container": "#201f1f",
+                        "background": "#131313",
+                        "outline": "#919191",
+                        "outline-variant": "#474747",
+                    },
+                    fontFamily: {
+                        headline: ["Noto Serif"],
+                        body: ["Manrope"],
+                        label: ["Manrope"],
+                        mono: ["JetBrains Mono"],
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body { background-color: #131313; color: #e5e2e1; font-family: 'Manrope', sans-serif; -webkit-font-smoothing: antialiased; }
+        .font-serif { font-family: 'Noto Serif', serif; }
+        ::selection { background-color: #e5e2e1; color: #131313; }
+        .nav-menu { display: none; }
+        .nav-menu.open { display: flex; }
+        @media (min-width: 768px) { .nav-menu { display: flex !important; } .nav-toggle { display: none !important; } }
+        .prose-custom h2 { font-family: 'Noto Serif', serif; font-size: 1.5rem; margin-top: 2.5rem; margin-bottom: 1rem; }
+        .prose-custom h3 { font-family: 'Noto Serif', serif; font-size: 1.2rem; margin-top: 1.75rem; margin-bottom: 0.75rem; }
+        .prose-custom p { margin-bottom: 1rem; line-height: 1.75; color: #c6c6c6; }
+        .prose-custom ul, .prose-custom ol { margin-bottom: 1rem; padding-left: 1.5rem; color: #c6c6c6; }
+        .prose-custom li { margin-bottom: 0.25rem; line-height: 1.7; }
+        .prose-custom a { color: #e5e2e1; text-decoration: underline; }
+        .prose-custom code { background: #2a2a2a; padding: 2px 6px; border-radius: 3px; font-family: 'JetBrains Mono', monospace; font-size: 0.875em; }
+        .prose-custom pre { background: #1c1b1b; border: 1px solid #474747; padding: 1rem 1.25rem; border-radius: 4px; overflow-x: auto; margin-bottom: 1.5rem; }
+        .prose-custom pre code { background: transparent; padding: 0; font-size: 0.875rem; line-height: 1.65; }
+        .prose-custom blockquote { border-left: 2px solid #474747; padding-left: 1rem; margin: 1rem 0; font-style: italic; color: #c6c6c6; }
+        .prose-custom strong { color: #e5e2e1; }
+        .highlight .c, .highlight .cm, .highlight .c1 { color: #6b6b6b; font-style: italic; }
+        .highlight .k, .highlight .kd, .highlight .kn, .highlight .kr { color: #c6c6c6; font-weight: 600; }
+        .highlight .s, .highlight .s1, .highlight .s2 { color: #b5d6b5; }
+        .highlight .mi, .highlight .mf { color: #d6c6b5; }
+        .highlight .nf, .highlight .nc { color: #e5e2e1; }
+    </style>
+</head>
+<body class="bg-background text-on-surface">
+
+<nav class="sticky top-0 z-50 bg-[#131313]/90 backdrop-blur-md border-b border-outline-variant/30">
+    <div class="flex justify-between items-center w-full px-8 py-5 max-w-screen-2xl mx-auto">
+        <a href="/" class="text-xl font-serif tracking-tighter hover:opacity-70 transition-opacity">← Home</a>
+        <button class="nav-toggle flex flex-col gap-[5px] md:hidden" aria-label="Toggle navigation" onclick="document.querySelector('.nav-menu').classList.toggle('open')">
+            <span class="block w-5 h-[2px] bg-on-surface"></span>
+            <span class="block w-5 h-[2px] bg-on-surface"></span>
+            <span class="block w-5 h-[2px] bg-on-surface"></span>
+        </button>
+        <div class="nav-menu flex-col md:flex-row absolute md:relative top-full left-0 right-0 md:top-auto bg-[#131313]/98 md:bg-transparent items-center gap-8 px-8 py-4 md:p-0 border-b md:border-0 border-outline-variant/30">
+            <a class="text-xs tracking-[0.15em] uppercase text-on-surface-variant hover:text-on-surface transition-colors py-2 md:py-0" href="/#experience">Experience</a>
+            <a class="text-xs tracking-[0.15em] uppercase text-on-surface-variant hover:text-on-surface transition-colors py-2 md:py-0" href="/#projects">Projects</a>
+            <a class="text-xs tracking-[0.15em] uppercase text-on-surface-variant hover:text-on-surface transition-colors py-2 md:py-0" href="/leetcode/">Leetcode</a>
+            <a class="text-xs tracking-[0.15em] uppercase text-on-surface-variant hover:text-on-surface transition-colors py-2 md:py-0" href="/delft/">Delft</a>
+            <a class="text-xs tracking-[0.15em] uppercase text-on-surface-variant hover:text-on-surface transition-colors py-2 md:py-0" href="/#contact">Contact</a>
+        </div>
+    </div>
+</nav>
+
+<main class="max-w-screen-2xl mx-auto px-8">
+    <article class="py-16 max-w-3xl mx-auto">
+    <a href="/delft/" class="text-xs tracking-[0.2em] uppercase text-on-surface-variant hover:text-on-surface transition-colors">&larr; All posts</a>
+    <div class="mt-8 mb-12 pb-8 border-b border-outline-variant">
+        <h1 class="text-4xl md:text-5xl font-serif leading-tight tracking-tighter">파이썬 dict에서 값 꺼낼 땐 item['key']보다 .get()</h1>
+        
+        <p class="text-lg text-on-surface-variant mt-4 leading-relaxed">item['key']는 키가 없으면 그냥 죽어버린다. .get()은 None을 돌려준다. 그 차이가 생각보다 크다.</p>
+        
+    </div>
+    <div class="prose-custom">
+        <p>파이썬 처음 배울 때 딕셔너리에서 값 꺼내는 거 다 이렇게 배운다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">value</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="sh">'</span><span class="s">key</span><span class="sh">'</span><span class="p">]</span>
+</code></pre></div></div>
+
+<p>근데 이거, 키가 없으면 그냥 <code class="language-plaintext highlighter-rouge">KeyError</code> 나면서 죽어버린다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">user</span> <span class="o">=</span> <span class="p">{</span><span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">Tae</span><span class="sh">'</span><span class="p">}</span>
+<span class="n">user</span><span class="p">[</span><span class="sh">'</span><span class="s">email</span><span class="sh">'</span><span class="p">]</span>  <span class="c1"># KeyError: 'email'
+</span></code></pre></div></div>
+
+<p>문제는 실제 코드에서 딕셔너리가 항상 우리가 원하는 키를 다 갖고 있다는 보장이 없다는 거다. API 응답 받아서 파싱하거나, 설정 파일 읽거나, JSON 다룰 때 그 키가 있을 수도 있고 없을 수도 있다.</p>
+
+<h2 id="get을-쓰면"><code class="language-plaintext highlighter-rouge">.get()</code>을 쓰면</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">user</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">'</span><span class="s">email</span><span class="sh">'</span><span class="p">)</span>          <span class="c1"># None
+</span><span class="n">user</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">'</span><span class="s">email</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">n/a</span><span class="sh">'</span><span class="p">)</span>   <span class="c1"># 'n/a' (기본값 지정)
+</span></code></pre></div></div>
+
+<p>키가 없으면 그냥 <code class="language-plaintext highlighter-rouge">None</code>을 돌려준다. 죽지 않는다. 기본값을 주고 싶으면 두 번째 인자로 넘기면 된다.</p>
+
+<h2 id="그래서-뭐가-좋냐">그래서 뭐가 좋냐</h2>
+
+<p><code class="language-plaintext highlighter-rouge">if 'email' in user</code> 같은 체크를 따로 안 해도 된다는 게 크다.</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 이거 대신
+</span><span class="k">if</span> <span class="sh">'</span><span class="s">email</span><span class="sh">'</span> <span class="ow">in</span> <span class="n">user</span><span class="p">:</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="n">user</span><span class="p">[</span><span class="sh">'</span><span class="s">email</span><span class="sh">'</span><span class="p">]</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">email</span> <span class="o">=</span> <span class="bp">None</span>
+
+<span class="c1"># 이거 한 줄
+</span><span class="n">email</span> <span class="o">=</span> <span class="n">user</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">'</span><span class="s">email</span><span class="sh">'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>코드도 짧아지고, 깜빡하고 키 체크 안 해서 프로덕션에서 KeyError 터지는 일도 없다.</p>
+
+<h2 id="그럼-itemkey는-언제-쓰나">그럼 <code class="language-plaintext highlighter-rouge">item['key']</code>는 언제 쓰나</h2>
+
+<p>키가 무조건 있어야 하는 상황. 없으면 그건 진짜 버그라서 빨리 터지는 게 나은 경우. 예를 들어 자기가 방금 만든 딕셔너리에서 값 꺼낼 때라든가, 스키마가 보장된 내부 데이터라든가. 그땐 <code class="language-plaintext highlighter-rouge">KeyError</code>로 빨리 죽는 게 디버깅에 도움이 된다.</p>
+
+<p>반대로 외부에서 들어오는 데이터 (API, 파일, 사용자 입력) 다룰 땐 거의 항상 <code class="language-plaintext highlighter-rouge">.get()</code>이 답이다.</p>
+
+    </div>
+</article>
+
+</main>
+
+<footer class="w-full py-10 border-t border-outline-variant mt-16">
+    <div class="flex justify-between items-center px-8 max-w-screen-2xl mx-auto">
+        <span class="text-xs tracking-widest uppercase text-on-surface-variant">&copy; 2026 Tae Yong Kwon</span>
+    </div>
+</footer>
+
+</body>
+</html>
