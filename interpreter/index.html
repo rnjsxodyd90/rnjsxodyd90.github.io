@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>파이썬 dict에서 값 꺼낼 땐 item['key']보다 .get() | Tae Yong Kwon</title>
+    <title>Interpreter | Tae Yong Kwon</title>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;600;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet"/>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script>
@@ -80,60 +80,69 @@
 </nav>
 
 <main class="max-w-screen-2xl mx-auto px-8">
-    <article class="py-16 max-w-3xl mx-auto">
-    <a href="/delft/" class="text-xs tracking-[0.2em] uppercase text-on-surface-variant hover:text-on-surface transition-colors">&larr; All posts</a>
-    <div class="mt-8 mb-12 pb-8 border-b border-outline-variant">
-        <h1 class="text-4xl md:text-5xl font-serif leading-tight tracking-tighter">파이썬 dict에서 값 꺼낼 땐 item['key']보다 .get()</h1>
-        
-        <p class="text-lg text-on-surface-variant mt-4 leading-relaxed">item['key']는 키가 없으면 그냥 죽어버린다. .get()은 None을 돌려준다. 그 차이가 생각보다 크다.</p>
-        
+    <section class="py-16">
+    <h3 class="text-xs tracking-[0.2em] uppercase text-on-surface-variant mb-4">Interpretation</h3>
+    <h1 class="text-5xl md:text-7xl font-serif tracking-tighter mb-8 leading-tight">Bridging<br/>Language<br/>Gaps</h1>
+    <p class="text-lg leading-relaxed max-w-xl text-on-surface-variant mb-20">
+        Freelance Korean-English interpreter and driver based in The Hague.
+        Entertainment, government, academic, and industry clients since 2022.
+    </p>
+
+    <div class="space-y-0 max-w-3xl">
+        <div class="flex gap-8 items-baseline border-b border-outline-variant py-4">
+            <span class="text-xs text-outline w-12 shrink-0">2026</span>
+            <p class="text-sm text-on-surface-variant">MBC environmental documentary on Dutch depoldering — dam coordination, professor interpreting, driving (daily Dutch / technical English)</p>
+        </div>
+        <div class="flex gap-8 items-baseline border-b border-outline-variant py-4">
+            <span class="text-xs text-outline w-12 shrink-0">2025</span>
+            <p class="text-sm text-on-surface-variant">BTS Jin, Amsterdam — laser-team interpreting</p>
+        </div>
+        <div class="flex gap-8 items-baseline border-b border-outline-variant py-4">
+            <span class="text-xs text-outline w-12 shrink-0"></span>
+            <p class="text-sm text-on-surface-variant">Maastricht University — cultivated leather and meat research team, interpreting and driving</p>
+        </div>
+        <div class="flex gap-8 items-baseline border-b border-outline-variant py-4">
+            <span class="text-xs text-outline w-12 shrink-0"></span>
+            <p class="text-sm text-on-surface-variant">SHINee Taemin, Tilburg — concert interpreting</p>
+        </div>
+        <div class="flex gap-8 items-baseline border-b border-outline-variant py-4">
+            <span class="text-xs text-outline w-12 shrink-0"></span>
+            <p class="text-sm text-on-surface-variant">Cheonghae Ethanol / Protix, Bergen op Zoom — technical interpreting for business acquisition and factory equipment</p>
+        </div>
+        <div class="flex gap-8 items-baseline border-b border-outline-variant py-4">
+            <span class="text-xs text-outline w-12 shrink-0">2024</span>
+            <p class="text-sm text-on-surface-variant">IGB LiVe blockchain exhibition, Amsterdam RAI — interpreting</p>
+        </div>
+        <div class="flex gap-8 items-baseline border-b border-outline-variant py-4">
+            <span class="text-xs text-outline w-12 shrink-0"></span>
+            <p class="text-sm text-on-surface-variant">MAMAMOO Wheein global concert — artist interpreting</p>
+        </div>
+        <div class="flex gap-8 items-baseline border-b border-outline-variant py-4">
+            <span class="text-xs text-outline w-12 shrink-0">2023</span>
+            <p class="text-sm text-on-surface-variant">Tesla Gigafactory Berlin — escort interpreting for rechargeable battery delegation</p>
+        </div>
+        <div class="flex gap-8 items-baseline border-b border-outline-variant py-4">
+            <span class="text-xs text-outline w-12 shrink-0"></span>
+            <p class="text-sm text-on-surface-variant">Ministry of Rural Economy — livestock farm visits on ammonia and particulate-matter reduction, interpreting and driving</p>
+        </div>
+        <div class="flex gap-8 items-baseline border-b border-outline-variant py-4">
+            <span class="text-xs text-outline w-12 shrink-0"></span>
+            <p class="text-sm text-on-surface-variant">Ministry of Rural Economy delegation at Wageningen University — advisory interpreting</p>
+        </div>
+        <div class="flex gap-8 items-baseline border-b border-outline-variant py-4">
+            <span class="text-xs text-outline w-12 shrink-0">2022</span>
+            <p class="text-sm text-on-surface-variant">TV Chosun nutritionist and doctor interviews — interpreting (1,200 km driven over 5 days)</p>
+        </div>
+        <div class="flex gap-8 items-baseline border-b border-outline-variant py-4">
+            <span class="text-xs text-outline w-12 shrink-0"></span>
+            <p class="text-sm text-on-surface-variant">ATEEZ, Amsterdam tour — laser-team interpreting</p>
+        </div>
+        <div class="flex gap-8 items-baseline py-4">
+            <span class="text-xs text-outline w-12 shrink-0"></span>
+            <p class="text-sm text-on-surface-variant">BLACKPINK, Amsterdam tour — audio-team interpreting</p>
+        </div>
     </div>
-    <div class="prose-custom">
-        <p>파이썬 처음 배울 때 딕셔너리에서 값 꺼내는 거 다 이렇게 배운다.</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">value</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="sh">'</span><span class="s">key</span><span class="sh">'</span><span class="p">]</span>
-</code></pre></div></div>
-
-<p>근데 이거, 키가 없으면 그냥 <code class="language-plaintext highlighter-rouge">KeyError</code> 나면서 죽어버린다.</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">user</span> <span class="o">=</span> <span class="p">{</span><span class="sh">'</span><span class="s">name</span><span class="sh">'</span><span class="p">:</span> <span class="sh">'</span><span class="s">Tae</span><span class="sh">'</span><span class="p">}</span>
-<span class="n">user</span><span class="p">[</span><span class="sh">'</span><span class="s">email</span><span class="sh">'</span><span class="p">]</span>  <span class="c1"># KeyError: 'email'
-</span></code></pre></div></div>
-
-<p>문제는 실제 코드에서 딕셔너리가 항상 우리가 원하는 키를 다 갖고 있다는 보장이 없다는 거다. API 응답 받아서 파싱하거나, 설정 파일 읽거나, JSON 다룰 때 그 키가 있을 수도 있고 없을 수도 있다.</p>
-
-<h2 id="get을-쓰면"><code class="language-plaintext highlighter-rouge">.get()</code>을 쓰면</h2>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">user</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">'</span><span class="s">email</span><span class="sh">'</span><span class="p">)</span>          <span class="c1"># None
-</span><span class="n">user</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">'</span><span class="s">email</span><span class="sh">'</span><span class="p">,</span> <span class="sh">'</span><span class="s">n/a</span><span class="sh">'</span><span class="p">)</span>   <span class="c1"># 'n/a' (기본값 지정)
-</span></code></pre></div></div>
-
-<p>키가 없으면 그냥 <code class="language-plaintext highlighter-rouge">None</code>을 돌려준다. 죽지 않는다. 기본값을 주고 싶으면 두 번째 인자로 넘기면 된다.</p>
-
-<h2 id="그래서-뭐가-좋냐">그래서 뭐가 좋냐</h2>
-
-<p><code class="language-plaintext highlighter-rouge">if 'email' in user</code> 같은 체크를 따로 안 해도 된다는 게 크다.</p>
-
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 이거 대신
-</span><span class="k">if</span> <span class="sh">'</span><span class="s">email</span><span class="sh">'</span> <span class="ow">in</span> <span class="n">user</span><span class="p">:</span>
-    <span class="n">email</span> <span class="o">=</span> <span class="n">user</span><span class="p">[</span><span class="sh">'</span><span class="s">email</span><span class="sh">'</span><span class="p">]</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="n">email</span> <span class="o">=</span> <span class="bp">None</span>
-
-<span class="c1"># 이거 한 줄
-</span><span class="n">email</span> <span class="o">=</span> <span class="n">user</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="sh">'</span><span class="s">email</span><span class="sh">'</span><span class="p">)</span>
-</code></pre></div></div>
-
-<p>코드도 짧아지고, 깜빡하고 키 체크 안 해서 프로덕션에서 KeyError 터지는 일도 없다.</p>
-
-<h2 id="그럼-itemkey는-언제-쓰나">그럼 <code class="language-plaintext highlighter-rouge">item['key']</code>는 언제 쓰나</h2>
-
-<p>키가 무조건 있어야 하는 상황. 없으면 그건 진짜 버그라서 빨리 터지는 게 나은 경우. 예를 들어 자기가 방금 만든 딕셔너리에서 값 꺼낼 때라든가, 스키마가 보장된 내부 데이터라든가. 그땐 <code class="language-plaintext highlighter-rouge">KeyError</code>로 빨리 죽는 게 디버깅에 도움이 된다.</p>
-
-<p>반대로 외부에서 들어오는 데이터 (API, 파일, 사용자 입력) 다룰 땐 거의 항상 <code class="language-plaintext highlighter-rouge">.get()</code>이 답이다.</p>
-
-    </div>
-</article>
+</section>
 
 </main>
 
