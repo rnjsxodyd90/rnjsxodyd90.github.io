@@ -4,6 +4,13 @@
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
     <title>Tae Yong Kwon | Software Engineer &amp; Interpreter</title>
+    <meta name="description" content="Tae Yong Kwon — MSc Computer Science student at TU Delft and Cloud Engineer. Distributed systems, cloud infrastructure, and automation. Based in The Hague, NL."/>
+    <meta name="theme-color" content="#131313"/>
+    <meta property="og:title" content="Tae Yong Kwon | Software Engineer &amp; Interpreter"/>
+    <meta property="og:description" content="MSc Computer Science student at TU Delft and Cloud Engineer. Distributed systems, cloud infrastructure, and automation."/>
+    <meta property="og:type" content="website"/>
+    <meta property="og:url" content="https://rnjsxodyd90.github.io/"/>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='14' fill='%23131313' stroke='%23474747' stroke-width='2'/><text x='32' y='43' font-family='Georgia, serif' font-size='30' fill='%23e5e2e1' text-anchor='middle'>TK</text></svg>"/>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Manrope:wght@300;400;600;800&display=swap" rel="stylesheet"/>
     <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
     <script>
@@ -44,14 +51,6 @@
             width: 0;
             animation: typing 2s steps(13, end) 0.5s forwards, blink 0.6s step-end 4 0.5s, cursorHide 0s 2.5s forwards;
         }
-        .hero-name.reset {
-            animation: none;
-            width: 0;
-            border-right-color: #e5e2e1;
-        }
-        .hero-name.replay {
-            animation: typing 2s steps(13, end) forwards, blink 0.6s step-end 4, cursorHide 0s 2s forwards;
-        }
         @keyframes typing {
             to { width: 100%; }
         }
@@ -65,6 +64,29 @@
         .hero-name-wrap {
             display: inline-block;
         }
+        /* Hero entrance: subtitle, intro, and buttons rise in while the name types */
+        .hero-fade { opacity: 0; transform: translateY(16px); animation: heroFade 0.9s cubic-bezier(.2,.6,.2,1) forwards; }
+        .hero-fade.d1 { animation-delay: 0.9s; }
+        .hero-fade.d2 { animation-delay: 1.15s; }
+        .hero-fade.d3 { animation-delay: 1.4s; }
+        @keyframes heroFade {
+            to { opacity: 1; transform: none; }
+        }
+        /* Scroll-reveal */
+        .reveal { opacity: 0; transform: translateY(22px); transition: opacity 0.7s cubic-bezier(.2,.6,.2,1), transform 0.7s cubic-bezier(.2,.6,.2,1); }
+        .reveal.in { opacity: 1; transform: none; }
+        /* Anchored sections clear the sticky nav */
+        section { scroll-margin-top: 88px; }
+        /* Active section link in nav */
+        .nav-menu a.active { color: #e5e2e1; }
+        /* Skill chips */
+        #skills .rounded-full { transition: color 0.25s ease, transform 0.25s ease; }
+        #skills .rounded-full:hover { color: #e5e2e1; transform: translateY(-2px); }
+        @media (prefers-reduced-motion: reduce) {
+            .hero-name { animation: none; width: 100%; border-right-color: transparent; }
+            .hero-fade { animation: none; opacity: 1; transform: none; }
+            .reveal { opacity: 1; transform: none; transition: none; }
+        }
         .nav-menu { display: none; }
         .nav-menu.open { display: flex; }
         @media (min-width: 768px) { .nav-menu { display: flex !important; } .nav-toggle { display: none !important; } }
@@ -75,7 +97,7 @@
 <!-- Navigation -->
 <nav class="sticky top-0 z-50 bg-[#131313]/90 backdrop-blur-md border-b border-outline-variant/30">
     <div class="flex justify-between items-center w-full px-8 py-5 max-w-screen-2xl mx-auto">
-        <div class="text-xl font-serif tracking-tighter"></div>
+        <a class="text-xl font-serif tracking-tighter hover:opacity-70 transition-opacity" href="#">TK<span class="text-outline">.</span></a>
         <button class="nav-toggle flex flex-col gap-[5px] md:hidden" aria-label="Toggle navigation" onclick="document.querySelector('.nav-menu').classList.toggle('open')">
             <span class="block w-5 h-[2px] bg-on-surface"></span>
             <span class="block w-5 h-[2px] bg-on-surface"></span>
@@ -99,13 +121,13 @@
     <!-- Hero -->
     <section class="min-h-[80vh] flex flex-col justify-center pt-20 pb-32">
         <div class="hero-name-wrap mb-8">
-            <h1 class="hero-name text-[clamp(3.5rem,10vw,8rem)] font-serif leading-tight tracking-tighter">Tae Yong Kwon</h1>
+            <h1 class="hero-name text-[clamp(2.75rem,10vw,8rem)] font-serif leading-tight tracking-tighter">Tae Yong Kwon</h1>
         </div>
-        <h2 class="text-2xl md:text-3xl font-serif italic text-on-surface-variant mb-6">MSc Computer Science Student &amp; Data Engineer Workstudent</h2>
-        <p class="text-lg leading-relaxed max-w-xl text-on-surface-variant mb-12">
+        <h2 class="hero-fade d1 text-2xl md:text-3xl font-serif italic text-on-surface-variant mb-6">MSc Computer Science Student &amp; Cloud Engineer</h2>
+        <p class="hero-fade d2 text-lg leading-relaxed max-w-xl text-on-surface-variant mb-12">
             Student at TU Delft, specialization in distributed systems and software engineering. Highly Skilled Migrant Visa → Dutch Permanent Resident since November 2025 — no visa sponsorship required.
         </p>
-        <div class="flex gap-4">
+        <div class="hero-fade d3 flex gap-4">
             <a class="px-8 py-4 bg-primary text-on-primary font-bold tracking-tight hover:opacity-90 transition-opacity" href="#projects">View Projects</a>
             <a class="px-8 py-4 border border-outline text-primary font-bold tracking-tight hover:bg-surface-container-high transition-colors" href="#contact">Get in Touch</a>
         </div>
@@ -123,32 +145,48 @@
 
     <!-- Experience -->
     <section class="py-24" id="experience">
-        <h3 class="text-xs tracking-[0.2em] uppercase text-on-surface-variant mb-16">Experience</h3>
+        <h3 class="text-xs tracking-[0.2em] uppercase text-on-surface-variant mb-16"><span class="text-outline">01 /</span> Experience</h3>
         <div class="relative pl-8 md:pl-0">
             <div class="absolute left-0 md:left-1/4 top-0 bottom-0 w-[1px] bg-outline-variant"></div>
             <div class="space-y-20">
-                <div class="relative grid md:grid-cols-4 gap-8">
+                <div class="relative grid md:grid-cols-4 gap-8 group">
                     <div class="md:text-right md:pr-12">
-                        <span class="text-xs tracking-widest text-on-surface-variant">APR 2026 – PRESENT</span>
+                        <span class="text-xs tracking-widest text-on-surface-variant">JUN 2026 – PRESENT</span>
                         <div class="text-[10px] tracking-widest text-outline uppercase mt-1">Amsterdam, Netherlands</div>
                         <div class="flex md:justify-end mt-3"><div class="h-[3px] rounded-full" style="width: 16px; background: linear-gradient(to left, #e5e2e1, transparent);"></div></div>
                     </div>
-                    <div class="absolute left-[-4px] md:left-[calc(25%-4px)] w-2 h-2 rounded-full bg-primary z-10"></div>
+                    <div class="absolute left-[-4px] md:left-[calc(25%-4px)] w-2 h-2 rounded-full bg-primary z-10 transition-transform duration-300 group-hover:scale-[1.8]"></div>
+                    <div class="md:col-span-3">
+                        <h4 class="text-xl font-serif mb-2">Cloud Engineer (Early Talent Program), Nebius</h4>
+                        <p class="text-on-surface-variant max-w-2xl leading-relaxed">
+                            Automating cloud services in an Azure environment — building a Slack bot
+                            for access package requests, shipping infrastructure changes with Terraform,
+                            and improving observability in Grafana.
+                        </p>
+                    </div>
+                </div>
+                <div class="relative grid md:grid-cols-4 gap-8 group">
+                    <div class="md:text-right md:pr-12">
+                        <span class="text-xs tracking-widest text-on-surface-variant">APR 2026 – JUN 2026</span>
+                        <div class="text-[10px] tracking-widest text-outline uppercase mt-1">Amsterdam, Netherlands</div>
+                        <div class="flex md:justify-end mt-3"><div class="h-[3px] rounded-full bg-on-surface-variant/70" style="width: 12px;"></div></div>
+                    </div>
+                    <div class="absolute left-[-4px] md:left-[calc(25%-4px)] w-2 h-2 rounded-full bg-primary z-10 transition-transform duration-300 group-hover:scale-[1.8]"></div>
                     <div class="md:col-span-3">
                         <h4 class="text-xl font-serif mb-2">Data Engineer Workstudent, Loyens &amp; Loeff</h4>
                         <p class="text-on-surface-variant max-w-2xl leading-relaxed">
-                            Building metadata-driven ingestion pipelines in an Azure environment,
+                            Built metadata-driven ingestion pipelines in an Azure environment,
                             working with Microsoft Fabric and PySpark.
                         </p>
                     </div>
                 </div>
-                <div class="relative grid md:grid-cols-4 gap-8">
+                <div class="relative grid md:grid-cols-4 gap-8 group">
                     <div class="md:text-right md:pr-12">
                         <span class="text-xs tracking-widest text-on-surface-variant">FEB 2025 – MAR 2026</span>
                         <div class="text-[10px] tracking-widest text-outline uppercase mt-1">Den Bosch, Netherlands</div>
                         <div class="flex md:justify-end mt-3"><div class="h-[3px] rounded-full bg-on-surface-variant/70" style="width: 52px;"></div></div>
                     </div>
-                    <div class="absolute left-[-4px] md:left-[calc(25%-4px)] w-2 h-2 rounded-full bg-primary z-10"></div>
+                    <div class="absolute left-[-4px] md:left-[calc(25%-4px)] w-2 h-2 rounded-full bg-primary z-10 transition-transform duration-300 group-hover:scale-[1.8]"></div>
                     <div class="md:col-span-3">
                         <h4 class="text-xl font-serif mb-2">Field Engineer, Decide4Action</h4>
                         <p class="text-on-surface-variant max-w-2xl leading-relaxed">
@@ -158,13 +196,13 @@
                         </p>
                     </div>
                 </div>
-                <div class="relative grid md:grid-cols-4 gap-8">
+                <div class="relative grid md:grid-cols-4 gap-8 group">
                     <div class="md:text-right md:pr-12">
                         <span class="text-xs tracking-widest text-on-surface-variant">SEP 2023 – MAR 2024</span>
                         <div class="text-[10px] tracking-widest text-outline uppercase mt-1">Veldhoven, Netherlands</div>
                         <div class="flex md:justify-end mt-3"><div class="h-[3px] rounded-full bg-on-surface-variant/70" style="width: 24px;"></div></div>
                     </div>
-                    <div class="absolute left-[-4px] md:left-[calc(25%-4px)] w-2 h-2 rounded-full bg-primary z-10"></div>
+                    <div class="absolute left-[-4px] md:left-[calc(25%-4px)] w-2 h-2 rounded-full bg-primary z-10 transition-transform duration-300 group-hover:scale-[1.8]"></div>
                     <div class="md:col-span-3">
                         <h4 class="text-xl font-serif mb-2">Computer Science Intern, ASML</h4>
                         <p class="text-on-surface-variant max-w-2xl leading-relaxed">
@@ -173,13 +211,13 @@
                         </p>
                     </div>
                 </div>
-                <div class="relative grid md:grid-cols-4 gap-8">
+                <div class="relative grid md:grid-cols-4 gap-8 group">
                     <div class="md:text-right md:pr-12">
                         <span class="text-xs tracking-widest text-on-surface-variant">FEB 2023 – SEP 2023</span>
                         <div class="text-[10px] tracking-widest text-outline uppercase mt-1">Tilburg, Netherlands</div>
                         <div class="flex md:justify-end mt-3"><div class="h-[3px] rounded-full bg-on-surface-variant/70" style="width: 28px;"></div></div>
                     </div>
-                    <div class="absolute left-[-4px] md:left-[calc(25%-4px)] w-2 h-2 rounded-full bg-primary z-10"></div>
+                    <div class="absolute left-[-4px] md:left-[calc(25%-4px)] w-2 h-2 rounded-full bg-primary z-10 transition-transform duration-300 group-hover:scale-[1.8]"></div>
                     <div class="md:col-span-3">
                         <h4 class="text-xl font-serif mb-2">Research Intern, Tilburg University - TSHD</h4>
                         <p class="text-on-surface-variant max-w-2xl leading-relaxed">
@@ -188,13 +226,13 @@
                         </p>
                     </div>
                 </div>
-                <div class="relative grid md:grid-cols-4 gap-8">
+                <div class="relative grid md:grid-cols-4 gap-8 group">
                     <div class="md:text-right md:pr-12">
                         <span class="text-xs tracking-widest text-on-surface-variant">NOV 2018 – JUL 2020</span>
                         <div class="text-[10px] tracking-widest text-outline uppercase mt-1">Yanggu, Korea</div>
                         <div class="flex md:justify-end mt-3"><div class="h-[3px] rounded-full bg-on-surface-variant/70" style="width: 80px;"></div></div>
                     </div>
-                    <div class="absolute left-[-4px] md:left-[calc(25%-4px)] w-2 h-2 rounded-full bg-primary z-10"></div>
+                    <div class="absolute left-[-4px] md:left-[calc(25%-4px)] w-2 h-2 rounded-full bg-primary z-10 transition-transform duration-300 group-hover:scale-[1.8]"></div>
                     <div class="md:col-span-3">
                         <h4 class="text-xl font-serif mb-2">Sergeant - Field Radio Operator, ROK Army</h4>
                         <p class="text-on-surface-variant max-w-2xl leading-relaxed">
@@ -211,7 +249,7 @@
     <!-- Testimonial -->
     <section class="py-24 bg-surface-container-low -mx-8 px-8">
         <div class="max-w-4xl mx-auto">
-            <h3 class="text-xs tracking-[0.2em] uppercase text-on-surface-variant mb-12">Client Feedback</h3>
+            <h3 class="text-xs tracking-[0.2em] uppercase text-on-surface-variant mb-12"><span class="text-outline">02 /</span> Client Feedback</h3>
             <p class="text-xl font-serif leading-relaxed italic text-on-surface-variant">
                 Hij is analytisch erg snel en denkt mee, maar luistert ook naar de input van de klant in dit soort situaties zonder dit af te doen als "non-expertise" of onbelangrijk. Hij werkt snel en efficiënt, staat open voor vragen, legt goed en begrijpelijk uit en neemt je als klant mee in iedere stap van het proces en herhaalt dit waar nodig.
             </p>
@@ -227,7 +265,7 @@
 
     <!-- Skills -->
     <section class="py-24" id="skills">
-        <h3 class="text-xs tracking-[0.2em] uppercase text-on-surface-variant mb-16">Technical Skills</h3>
+        <h3 class="text-xs tracking-[0.2em] uppercase text-on-surface-variant mb-16"><span class="text-outline">03 /</span> Technical Skills</h3>
         <div class="grid md:grid-cols-2 gap-x-24 gap-y-16">
             <div>
                 <h4 class="text-lg font-serif mb-6">Programming Languages</h4>
@@ -255,6 +293,7 @@
                     <span class="px-3 py-1 rounded-full bg-surface-container-high text-xs tracking-wide text-on-surface-variant">Kubernetes</span>
                     <span class="px-3 py-1 rounded-full bg-surface-container-high text-xs tracking-wide text-on-surface-variant">Istio</span>
                     <span class="px-3 py-1 rounded-full bg-surface-container-high text-xs tracking-wide text-on-surface-variant">Helm</span>
+                    <span class="px-3 py-1 rounded-full bg-surface-container-high text-xs tracking-wide text-on-surface-variant">Terraform</span>
                     <span class="px-3 py-1 rounded-full bg-surface-container-high text-xs tracking-wide text-on-surface-variant">Jenkins</span>
                     <span class="px-3 py-1 rounded-full bg-surface-container-high text-xs tracking-wide text-on-surface-variant">Linux</span>
                     <span class="px-3 py-1 rounded-full bg-surface-container-high text-xs tracking-wide text-on-surface-variant">Prometheus</span>
@@ -277,10 +316,10 @@
 
     <!-- Projects -->
     <section class="py-24" id="projects">
-        <h3 class="text-xs tracking-[0.2em] uppercase text-on-surface-variant mb-16">Projects &amp; Businesses</h3>
+        <h3 class="text-xs tracking-[0.2em] uppercase text-on-surface-variant mb-16"><span class="text-outline">04 /</span> Projects &amp; Businesses</h3>
         <div class="space-y-20">
             <div class="grid md:grid-cols-2 gap-12">
-                <div>
+                <div class="border border-outline-variant/40 p-8 md:p-10 hover:border-outline/60 transition-colors duration-300">
                     <span class="text-xs tracking-widest text-on-surface-variant uppercase">E-Commerce · KVK: 98957015</span>
                     <h4 class="text-3xl font-serif mt-3 mb-4">Sura Steel</h4>
                     <a href="https://www.surasteel.com" target="_blank" class="text-sm text-on-surface-variant hover:text-on-surface transition-colors">surasteel.com</a>
@@ -294,7 +333,7 @@
                         <span class="text-xs font-bold border-b border-outline-variant pb-1">Stripe</span>
                     </div>
                 </div>
-                <div>
+                <div class="border border-outline-variant/40 p-8 md:p-10 hover:border-outline/60 transition-colors duration-300">
                     <span class="text-xs tracking-widest text-on-surface-variant uppercase">Mobile App</span>
                     <h4 class="text-3xl font-serif mt-3 mb-4">Inburgering Mate</h4>
                     <a href="https://apps.apple.com/nl/app/inburgering-mate/id6757565733" target="_blank" class="text-sm text-on-surface-variant hover:text-on-surface transition-colors">Available on App Store &amp; Play Store</a>
@@ -336,7 +375,7 @@
 
     <!-- Education -->
     <section class="py-24" id="education">
-        <h3 class="text-xs tracking-[0.2em] uppercase text-on-surface-variant mb-16">Education</h3>
+        <h3 class="text-xs tracking-[0.2em] uppercase text-on-surface-variant mb-16"><span class="text-outline">05 /</span> Education</h3>
         <div class="grid md:grid-cols-3 gap-12">
             <div>
                 <span class="text-xs text-outline uppercase tracking-widest">Sep 2025 – Sep 2027</span>
@@ -355,7 +394,7 @@
             </div>
         </div>
 
-        <h3 class="text-xs tracking-[0.2em] uppercase text-on-surface-variant mt-20 mb-10">Certifications</h3>
+        <h3 class="text-xs tracking-[0.2em] uppercase text-on-surface-variant mt-20 mb-10"><span class="text-outline">06 /</span> Certifications</h3>
         <div>
             <span class="text-xs text-outline uppercase tracking-widest">Mar 2026</span>
             <h4 class="text-xl font-serif mt-2">Certified Kubernetes Administrator (CKA)</h4>
@@ -387,7 +426,7 @@
 
     <!-- Contact -->
     <section class="py-24 border-t border-outline-variant" id="contact">
-        <h3 class="text-xs tracking-[0.2em] uppercase text-on-surface-variant mb-16">Contact</h3>
+        <h3 class="text-xs tracking-[0.2em] uppercase text-on-surface-variant mb-16"><span class="text-outline">07 /</span> Contact</h3>
         <div class="flex flex-wrap items-start gap-x-16 gap-y-8">
             <div class="flex flex-col">
                 <span class="text-xs text-outline uppercase tracking-widest mb-2">Email</span>
@@ -396,6 +435,10 @@
             <div class="flex flex-col">
                 <span class="text-xs text-outline uppercase tracking-widest mb-2">LinkedIn</span>
                 <a class="text-lg font-serif hover:opacity-70 transition-opacity" href="https://www.linkedin.com/in/taeyong-kwon-08432a158" target="_blank">Tae Yong Kwon</a>
+            </div>
+            <div class="flex flex-col">
+                <span class="text-xs text-outline uppercase tracking-widest mb-2">GitHub</span>
+                <a class="text-lg font-serif hover:opacity-70 transition-opacity" href="https://github.com/rnjsxodyd90" target="_blank">rnjsxodyd90</a>
             </div>
             <div class="flex flex-col">
                 <span class="text-xs text-outline uppercase tracking-widest mb-2">Phone</span>
@@ -418,28 +461,65 @@
 </footer>
 
 <script>
-    // Hero name replay loop
-    const heroEl = document.querySelector('.hero-name');
-    setInterval(() => {
-        heroEl.classList.remove('replay');
-        heroEl.classList.add('reset');
-        requestAnimationFrame(() => {
-            requestAnimationFrame(() => {
-                heroEl.classList.remove('reset');
-                heroEl.classList.add('replay');
-            });
-        });
-    }, 12500);
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // Smooth scroll
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function(e) {
             e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const href = this.getAttribute('href');
+            if (href.length > 1) {
+                const target = document.querySelector(href);
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
             document.querySelector('.nav-menu').classList.remove('open');
         });
     });
+
+    // Scroll-reveal
+    if (!prefersReducedMotion && 'IntersectionObserver' in window) {
+        const revealEls = document.querySelectorAll([
+            'main section > h3',
+            '#experience .space-y-20 > div',
+            'main section .max-w-4xl',
+            '#skills .grid > div',
+            '#projects .grid > div',
+            '#education .grid > div',
+            '#education > div:not(.grid)',
+            'main section .flex-wrap > div'
+        ].join(','));
+        const revealSet = new Set(revealEls);
+        revealEls.forEach(el => {
+            const siblings = [...el.parentElement.children].filter(c => revealSet.has(c));
+            el.style.transitionDelay = Math.min(siblings.indexOf(el), 5) * 70 + 'ms';
+            el.classList.add('reveal');
+        });
+        const io = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in');
+                    io.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1, rootMargin: '0px 0px -8% 0px' });
+        revealEls.forEach(el => io.observe(el));
+    }
+
+    // Highlight the section currently in view in the nav
+    if ('IntersectionObserver' in window) {
+        const spy = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (!entry.isIntersecting) return;
+                const link = document.querySelector('.nav-menu a[href="#' + entry.target.id + '"]');
+                if (!link) return;
+                document.querySelectorAll('.nav-menu a.active').forEach(a => a.classList.remove('active'));
+                link.classList.add('active');
+            });
+        }, { rootMargin: '-25% 0px -65% 0px' });
+        document.querySelectorAll('main section[id]').forEach(s => spy.observe(s));
+    }
 </script>
 </body>
 </html>
