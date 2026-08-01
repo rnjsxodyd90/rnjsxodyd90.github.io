@@ -44,25 +44,30 @@
         ::selection { background-color: #e5e2e1; color: #131313; }
         .hero-name {
             display: inline;
-            border-right: 3px solid #e5e2e1;
             white-space: nowrap;
             overflow: hidden;
             width: 0;
-            animation: typing 2s steps(13, end) 0.5s forwards, blink 0.6s step-end 4 0.5s, cursorHide 0s 2.5s forwards;
+            animation: typing 2s steps(13, end) 0.5s forwards;
         }
         @keyframes typing {
             to { width: 100%; }
         }
-        @keyframes blink {
-            0%, 100% { border-color: #e5e2e1; }
-            50% { border-color: transparent; }
-        }
-        @keyframes cursorHide {
-            to { border-color: transparent; }
-        }
         .hero-name-wrap {
             display: inline-block;
         }
+        /* Cycling typewriter cursor in the hero subtitle */
+        .type-cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1em;
+            background-color: #ffffff;
+            margin-left: 3px;
+            vertical-align: -0.1em;
+            animation: cursorBlink 1s step-end infinite;
+        }
+        /* solid while typing, blinking only while at rest — like a real editor caret */
+        .type-cursor.typing { animation: none; opacity: 1; }
+        @keyframes cursorBlink { 50% { opacity: 0; } }
         /* Hero entrance: subtitle, intro, and buttons rise in while the name types */
         .hero-fade { opacity: 0; transform: translateY(16px); animation: heroFade 0.9s cubic-bezier(.2,.6,.2,1) forwards; }
         .hero-fade.d1 { animation-delay: 0.9s; }
@@ -72,8 +77,9 @@
             to { opacity: 1; transform: none; }
         }
         @media (prefers-reduced-motion: reduce) {
-            .hero-name { animation: none; width: 100%; border-right-color: transparent; }
+            .hero-name { animation: none; width: 100%; }
             .hero-fade { animation: none; opacity: 1; transform: none; }
+            .type-cursor { animation: none; opacity: 0; }
         }
         .nav-menu { display: none; }
         .nav-menu.open { display: flex; }
@@ -111,9 +117,13 @@
         <div class="hero-name-wrap mb-8">
             <h1 class="hero-name text-[clamp(2.75rem,10vw,8rem)] font-serif leading-tight tracking-tighter">Tae Yong Kwon</h1>
         </div>
-        <h2 class="hero-fade d1 text-2xl md:text-3xl font-serif italic text-on-surface-variant mb-6">MSc Computer Science Student &amp; Cloud Engineer</h2>
+        <h2 class="hero-fade d1 text-[clamp(1rem,5vw,1.875rem)] font-serif italic text-on-surface-variant mb-6 whitespace-nowrap">
+            <span class="sr-only">Hello, I'm a Cloud Engineer, Software Engineer and Student</span>
+            <span aria-hidden="true">Hello, I'm <span id="typeword" class="text-primary"></span><span class="type-cursor"></span></span>
+        </h2>
         <p class="hero-fade d2 text-lg leading-relaxed max-w-xl text-on-surface-variant mb-12">
-            Student at TU Delft, specialization in distributed systems and software engineering. Highly Skilled Migrant Visa → Dutch Permanent Resident since November 2025 — no visa sponsorship required.
+            MSc student at TU Delft, specializing in distributed systems and software engineering.<br>
+            Dutch permanent resident hence no visa sponsorship required
         </p>
         <div class="hero-fade d3 flex gap-4">
             <a class="px-8 py-4 bg-primary text-on-primary font-bold tracking-tight hover:opacity-90 transition-opacity" href="#projects">View Projects</a>
@@ -303,7 +313,7 @@
     </section>
 
     <!-- Projects -->
-    <section class="py-24" id="projects">
+    <section class="py-24 border-t border-outline-variant" id="projects">
         <h3 class="text-xs tracking-[0.2em] uppercase text-on-surface-variant mb-16">Projects &amp; Businesses</h3>
         <div class="space-y-20">
             <div class="grid md:grid-cols-2 gap-12">
@@ -350,7 +360,7 @@
     </section>
 
     <!-- Education -->
-    <section class="py-24" id="education">
+    <section class="py-24 border-t border-outline-variant" id="education">
         <h3 class="text-xs tracking-[0.2em] uppercase text-on-surface-variant mb-16">Education</h3>
         <div class="grid md:grid-cols-3 gap-12">
             <div>
@@ -406,7 +416,7 @@
         <div class="flex flex-wrap items-start gap-x-16 gap-y-8">
             <div class="flex flex-col">
                 <span class="text-xs text-outline uppercase tracking-widest mb-2">Email</span>
-                <a class="text-lg font-serif hover:opacity-70 transition-opacity" href="mailto:mjsxodyd@gmail.com">mjsxodyd@gmail.com</a>
+                <a class="text-lg font-serif hover:opacity-70 transition-opacity" href="mailto:rnjsxodyd@gmail.com">rnjsxodyd@gmail.com</a>
             </div>
             <div class="flex flex-col">
                 <span class="text-xs text-outline uppercase tracking-widest mb-2">LinkedIn</span>
@@ -446,6 +456,42 @@
             document.querySelector('.nav-menu').classList.remove('open');
         });
     });
+
+    // Hero subtitle: type each role out, hold, delete, move to the next.
+    // Keystrokes are jittered so the rhythm reads as human, not metronomic;
+    // the caret stays solid while "typing" and only blinks at rest.
+    (function () {
+        const el = document.getElementById('typeword');
+        const cursor = document.querySelector('.type-cursor');
+        if (!el || !cursor) return;
+        const words = ['a Cloud Engineer', 'a Software Engineer', 'a Student'];
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            el.textContent = words[0];
+            return;
+        }
+        const rand = (min, max) => min + Math.random() * (max - min);
+        let wordIdx = 0, len = 0, deleting = false;
+        function tick() {
+            const word = words[wordIdx];
+            len += deleting ? -1 : 1;
+            el.textContent = word.slice(0, len);
+            cursor.classList.add('typing');
+            let delay = deleting ? rand(35, 65) : rand(70, 130);
+            if (!deleting && len === word.length) {
+                deleting = true;
+                delay = 2000;
+                cursor.classList.remove('typing');
+            } else if (deleting && len === 0) {
+                deleting = false;
+                wordIdx = (wordIdx + 1) % words.length;
+                delay = 500;
+                cursor.classList.remove('typing');
+            }
+            setTimeout(tick, delay);
+        }
+        // start right after the name finishes its own typing reveal (0.5s + 2s)
+        setTimeout(tick, 2600);
+    })();
 </script>
 </body>
 </html>
