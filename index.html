@@ -155,8 +155,9 @@
                     </div>
                     <div class="absolute left-[-4px] md:left-[calc(25%-4px)] w-2 h-2 rounded-full bg-primary z-10"></div>
                     <div class="md:col-span-3">
-                        <h4 class="text-xl font-serif mb-2">Cloud Engineer (Early Talent Program), Nebius</h4>
+                        <h4 class="text-xl font-serif mb-2">Forward Deployed Engineer, Nebius</h4>
                         <p class="text-on-surface-variant max-w-2xl leading-relaxed">
+                            Joined as a Cloud Engineer (Early Talent Program) in June 2026.
                             Automating cloud services in an Azure environment — building a Slack bot
                             for access package requests, shipping infrastructure changes with Terraform,
                             and improving observability in Grafana.
@@ -338,6 +339,11 @@
 
         <!-- Other Projects -->
         <div class="grid md:grid-cols-3 gap-12 mt-24 pt-20 border-t border-outline-variant">
+            <div>
+                <h5 class="text-lg font-serif mb-3">Terraform AzureAD Provider (Open Source)</h5>
+                <p class="text-sm text-on-surface-variant mb-3">Fixed a regression in HashiCorp's Terraform AzureAD provider: Microsoft Graph began rejecting the filter used to poll new access package catalog associations, so every create failed with InvalidFilter. Merged upstream.</p>
+                <a href="https://github.com/hashicorp/terraform-provider-azuread/pull/1979" target="_blank" class="text-xs text-outline hover:text-on-surface transition-colors uppercase tracking-widest">Pull Request →</a>
+            </div>
             <div>
                 <h5 class="text-lg font-serif mb-3">Development of Distributed Applications</h5>
                 <p class="text-sm text-on-surface-variant mb-3">TU Delft DevOps course project. Containerized a Java Spring Boot frontend and Python ML classifier, provisioned a Kubernetes 1.32 cluster with Vagrant and Ansible, authored Helm charts for reproducible deployment, and implemented Istio canary deployments with rate limiting and sticky sessions. Monitoring via Prometheus and Grafana with email alerting.</p>
